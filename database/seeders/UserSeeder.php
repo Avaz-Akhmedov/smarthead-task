@@ -29,5 +29,10 @@ class UserSeeder extends Seeder
         ]);
 
         $manager->assignRole(UserRoleEnum::MANAGER->value);
+
+        User::query()->firstOrCreate(['email' => 'user@gmail.com'], [
+            'name' => 'user',
+            'password' => 'user'
+        ]);
     }
 }
