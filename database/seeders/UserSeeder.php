@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -12,18 +13,21 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->firstOrCreate([
+        $admin = User::query()->firstOrCreate([
             'email' => 'admin@gmail.com'
         ], [
             'name' => 'admin',
             'password' => 'admin'
         ]);
+        $admin->assignRole(UserRoleEnum::ADMIN->value);
 
-        User::query()->firstOrCreate([
+        $manager = User::query()->firstOrCreate([
             'email' => 'manager@gmail.com'
         ], [
             'name' => 'manager',
             'password' => 'manager'
         ]);
+
+        $manager->assignRole(UserRoleEnum::MANAGER->value);
     }
 }
