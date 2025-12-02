@@ -4,26 +4,47 @@ namespace App\Services;
 
 use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
+use App\Repositories\CustomerRepository;
 use App\Repositories\TicketRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class TicketService
 {
     public function __construct(
-        private TicketRepository $repository
+        private TicketRepository   $ticketRepository,
+        private CustomerRepository $customerRepository
     )
     {
     }
 
     public function getTicketStatistics(array $filters)
     {
-        return $this->repository->getFilteredTickets($filters);
+        return $this->ticketRepository->getFilteredTickets($filters);
     }
 
-    public function updateStatus(Ticket $ticket,string $status): void
+    public function updateStatus(Ticket $ticket, string $status): void
     {
         $answeredAt = $status === TicketStatusEnum::COMPLETED->value ? now() : null;
 
-        $this->repository->updateStatus($ticket, $status, $answeredAt);
+        $this->ticketRepository->updateStatus($ticket, $status, $answeredAt);
+    }
+
+
+    public function store(array $data): Ticket
+    {
+        return DB::transaction(function () use ($data) {
+            $customer = $this->customerRepository->firstOrCreate($data);
+
+            return $this->ticketRepository->createTicket($customer, $data);
+        });
+    }
+
+    public function hasRecentTicket(?string $email, ?string $phone): bool
+    {
+        return $this->ticketRepository->hasRecentTicket($email, $phone);
 
     }
 }

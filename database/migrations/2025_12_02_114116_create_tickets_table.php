@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TicketStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained();
             $table->string('subject');
             $table->text('message');
-            $table->string('status');
+            $table->string('status')->default(TicketStatusEnum::NEW->value);
 
             $table->timestamp('answered_at')->nullable();
 

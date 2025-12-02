@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Ticket extends Model
+class Ticket extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory,InteractsWithMedia;
 
     protected $fillable = [
         'customer_id',
@@ -30,10 +31,6 @@ class Ticket extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function files(): HasMany
-    {
-        return $this->hasMany(File::class);
-    }
 
     public function scopeFilter(Builder $query, array $filters)
     {
@@ -53,6 +50,11 @@ class Ticket extends Model
             ->when($filters['date_to'] ?? null, function ($q, $date) {
                 $q->whereDate('created_at', '<=', $date);
             });
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('attachments')->useDisk(env('FILESYSTEM_DISK'));
     }
 
 }
