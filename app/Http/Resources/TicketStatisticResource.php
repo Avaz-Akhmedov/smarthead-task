@@ -16,6 +16,7 @@ class TicketStatisticResource extends JsonResource
             'message' => $this->message,
             'status' => $this->status,
             'customer'=> CustomerResource::make($this->whenLoaded('customer')),
+            'file' => FileResource::collection($this->whenLoaded('files')),
             'answered_at' => $this->answered_at,
             'created_at' => $this->created_at->toDateTimeString()
         ];

@@ -14,4 +14,12 @@ class TicketRepository
             ->latest()
             ->paginate();
     }
+
+    public function updateStatus(Ticket $ticket, string $status, $answeredAt): void
+    {
+        $ticket->update([
+            'status' => $status,
+            'answered_at' => $answeredAt
+        ]);
+    }
 }

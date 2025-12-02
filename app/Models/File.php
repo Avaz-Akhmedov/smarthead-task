@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
@@ -15,5 +17,10 @@ class File extends Model
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function relativePath(): Attribute
+    {
+        return new Attribute(get: fn($value) => $value ? Storage::disk(env('FILESYSTEM_DISK'))->url($value) : null);
     }
 }
