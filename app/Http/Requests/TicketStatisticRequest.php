@@ -19,8 +19,8 @@ class TicketStatisticRequest extends FormRequest
     {
         return [
             'status' => ['nullable', 'string', Rule::in(TicketStatusEnum::values())],
-            'email' => ['nullable','string','email'],
-            'phone_number' => ['nullable', 'regex:/^\+[0-9]+$/'],
+            'email' => ['nullable','string'],
+            'phone_number' => ['nullable', 'string'],
             'date_from' => ['nullable', 'date', 'before_or_equal:date_to'],
             'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
         ];

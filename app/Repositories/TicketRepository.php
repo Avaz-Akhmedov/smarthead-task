@@ -16,7 +16,7 @@ class TicketRepository
             ->with('customer')
             ->filter($filters)
             ->latest()
-            ->paginate();
+            ->paginate(16);
     }
 
     public function updateStatus(Ticket $ticket, string $status, $answeredAt): void

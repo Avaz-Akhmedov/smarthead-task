@@ -6,10 +6,8 @@ use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
 use App\Repositories\CustomerRepository;
 use App\Repositories\TicketRepository;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+
 
 class TicketService
 {
